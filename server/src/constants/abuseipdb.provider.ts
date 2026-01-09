@@ -37,10 +37,6 @@ class AbuseIPDBProvider implements ThreatIntelProvider<NormalizedResponse> {
       return this.fail("Unsupported IOC type");
     }
 
-    if (!this.isValidIP(ioc)) {
-      return this.fail("Invalid IP address format");
-    }
-
     if (!this.apiKey) {
       return this.fail("AbuseIPDB API key not configured");
     }
@@ -123,16 +119,6 @@ class AbuseIPDBProvider implements ThreatIntelProvider<NormalizedResponse> {
       confidence: 0,
       summary: reason,
     };
-  }
-
-  private isValidIP(ip: string): boolean {
-    const ipv4 =
-      /^(25[0-5]|2[0-4]\d|[01]?\d\d?)\.(25[0-5]|2[0-4]\d|[01]?\d\d?)\.(25[0-5]|2[0-4]\d|[01]?\d\d?)\.(25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
-
-    const ipv6 =
-      /^(([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4}|:))|(::1)$/;
-
-    return ipv4.test(ip) || ipv6.test(ip);
   }
 }
 
