@@ -32,13 +32,9 @@ class AbuseIPDBProvider implements ThreatIntelProvider<NormalizedResponse> {
   private apiKey = process.env.ABUSEIPDB_API_KEY;
   private baseUrl = process.env.ABUSEIPDB_BASE_URL || "https://api.abuseipdb.com/api/v2/check";
   
-  async query(ioc: string, type: IocType, ctx?: { ipVersion?: 4 | 6 }): Promise<NormalizedResponse> {
+  async query(ioc: string, type: IocType, options?: Record<string, unknown> | undefined): Promise<NormalizedResponse> {
     if (type !== "ip") {
       return this.fail("Unsupported IOC type");
-    }
-
-    if (ctx?.ipVersion === 6) {
-      return this.fail("AbuseIPDB IPv6 support depends on plan and may not be available");
     }
 
     if (!this.apiKey) {

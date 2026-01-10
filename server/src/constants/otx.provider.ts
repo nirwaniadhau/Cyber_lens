@@ -44,13 +44,13 @@ class OTXProvider implements ThreatIntelProvider<NormalizedResponse> {
   private baseUrl =
     process.env.OTX_BASE_URL || "https://otx.alienvault.com/api/v1";
 
-  async query(ioc: string, type: IocType, ctx?: { ipVersion?: 4 | 6 }): Promise<NormalizedResponse> {
+  async query(ioc: string, type: IocType): Promise<NormalizedResponse> {
     if (!this.apiKey) {
       return this.fail("OTX API key not configured");
     }
 
     try {
-      const endpoint = this.getEndpoint(ioc, type, ctx?.ipVersion);
+      const endpoint = this.getEndpoint(ioc, type);
       if (!endpoint) {
         return this.fail("Unsupported IOC type");
       }
@@ -78,12 +78,10 @@ class OTXProvider implements ThreatIntelProvider<NormalizedResponse> {
   }
 
   //----get endpoint based on ioc type-------------------------------------------------------
-  private getEndpoint(ioc: string, type: IocType, ipVersion?: 4 | 6): string | null {
+  private getEndpoint(ioc: string, type: IocType): string | null {
     switch (type) {
       case "ip":
-        return ipVersion === 6
-        ? `/indicators/IPv6/${ioc}/general`
-        : `/indicators/IPv4/${ioc}/general`;
+        return `/indicators/IPv4/${ioc}/general`;
       case "domain":
         return `/indicators/domain/${ioc}/general`;
       case "hash":
